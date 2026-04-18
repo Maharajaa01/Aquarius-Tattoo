@@ -10,6 +10,12 @@ export const metadata: Metadata = {
   title: 'Aquarius Tattoo Studio | Premium Tattoo & Piercing in Bangalore',
   description: 'Ink Your Story with Precision. Professional tattoo and piercing services in Jayanagar, Bangalore. 3000+ satisfied clients, certified artists, safe & hygienic studio.',
   generator: 'v0.app',
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 5,
+    userScalable: true,
+  },
   icons: {
     icon: [
       {

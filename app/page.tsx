@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react'
 import Navigation from '@/components/navigation'
 import HeroSection from '@/components/hero-section'
+import OfferPopup from '@/components/offer-popup'
+import TattooShowcase from '@/components/tattoo-showcase'
 import StatsSection from '@/components/stats-section'
 import StylesSection from '@/components/styles-section'
 import ServicesSection from '@/components/services-section'
@@ -26,7 +28,9 @@ export default function Home() {
   return (
     <div className="bg-background text-foreground">
       <Navigation isScrolled={isScrolled} />
+      <OfferPopup />
       <HeroSection />
+      <TattooShowcase />
       <StatsSection />
       <StylesSection />
       <ServicesSection />

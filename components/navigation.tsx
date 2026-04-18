@@ -12,11 +12,12 @@ export default function Navigation({ isScrolled }: NavigationProps) {
   const [isOpen, setIsOpen] = useState(false)
 
   const navItems = [
-    { label: 'Home', href: '#home' },
+    { label: 'Home', href: '/' },
     { label: 'Services', href: '#services' },
-    { label: 'Price Calculator', href: '/calculator' },
-    { label: 'Gallery', href: '#gallery' },
-    { label: 'Contact', href: '#contact' },
+    { label: 'Gallery', href: '/gallery' },
+    { label: 'Artists', href: '/artists' },
+    { label: 'Blog', href: '/blog' },
+    { label: 'Aftercare', href: '/aftercare' },
   ]
 
   return (
@@ -41,9 +42,10 @@ export default function Navigation({ isScrolled }: NavigationProps) {
               <Link
                 key={item.label}
                 href={item.href}
-                className="text-sm tracking-wide hover:text-accent transition-colors duration-200"
+                className="text-sm tracking-widest uppercase font-medium hover:text-accent transition-all duration-300 relative group"
               >
                 {item.label}
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-300"></span>
               </Link>
             ))}
           </div>
@@ -52,7 +54,7 @@ export default function Navigation({ isScrolled }: NavigationProps) {
           <div className="hidden md:block">
             <Link
               href="#contact"
-              className="px-6 py-2 bg-accent text-accent-foreground text-sm font-semibold tracking-wide hover:bg-opacity-90 transition-all duration-200"
+              className="px-6 py-2 bg-accent text-accent-foreground text-sm font-bold tracking-widest uppercase transition-all duration-300 hover:shadow-lg hover:shadow-accent/50"
             >
               BOOK NOW
             </Link>

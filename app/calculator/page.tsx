@@ -10,6 +10,17 @@ export default function CalculatorPage() {
   const [length, setLength] = useState(1)
   const [width, setWidth] = useState(1)
   const [offer, setOffer] = useState('standard')
+  const [couponCode, setCouponCode] = useState('')
+  const [appliedCoupon, setAppliedCoupon] = useState<string | null>(null)
+
+  const validateCoupon = (code: string): number => {
+    const coupons: { [key: string]: number } = {
+      'AQUA20': 0.20,
+      'AQUA25': 0.25,
+      'FIRST15': 0.15,
+    }
+    return coupons[code.toUpperCase()] || 0
+  }
 
   const calculatePrice = () => {
     if (type === 'piercing') {
@@ -29,6 +40,22 @@ export default function CalculatorPage() {
 
   const { min, max } = calculatePrice()
   const area = length * width
+  
+  const discountPercent = appliedCoupon ? validateCoupon(appliedCoupon) : 0
+  const discountAmount = Math.round(min * discountPercent)
+  const finalPrice = Math.round(min - discountAmount)
+  
+  const handleApplyCoupon = () => {
+    if (validateCoupon(couponCode) > 0) {
+      setAppliedCoupon(couponCode)
+      setCouponCode('')
+    }
+  }
+  
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null)
+    setCouponCode('')
+  }
 
   return (
     <div className="bg-background text-foreground min-h-screen">
@@ -163,20 +190,80 @@ export default function CalculatorPage() {
               </select>
             </div>
 
+            {/* Coupon Code Section */}
+            <div className="mb-8 p-4 md:p-6 bg-gradient-to-r from-accent/10 to-transparent border border-accent/30">
+              <label className="text-sm font-semibold tracking-wide uppercase mb-3 block text-accent">
+                Have a Coupon Code?
+              </label>
+              {!appliedCoupon ? (
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                  <input
+                    type="text"
+                    placeholder="e.g., AQUA20"
+                    value={couponCode}
+                    onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                    className="flex-1 px-3 sm:px-4 py-3 bg-background border border-border text-foreground focus:outline-none focus:border-accent transition-colors text-sm sm:text-base"
+                  />
+                  <button
+                    onClick={handleApplyCoupon}
+                    disabled={!couponCode}
+                    className="w-full sm:w-auto px-4 sm:px-6 py-3 bg-accent text-accent-foreground font-semibold tracking-wide hover:bg-opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm"
+                  >
+                    APPLY
+                  </button>
+                </div>
+              ) : (
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-background border border-accent p-3 sm:p-4 gap-3 sm:gap-0">
+                  <div>
+                    <p className="text-xs sm:text-sm text-muted-foreground">Applied Code</p>
+                    <p className="text-lg sm:text-lg font-bold text-accent">{appliedCoupon}</p>
+                  </div>
+                  <button
+                    onClick={handleRemoveCoupon}
+                    className="w-full sm:w-auto px-4 py-2 bg-secondary text-foreground text-sm font-semibold hover:bg-border transition-colors"
+                  >
+                    REMOVE
+                  </button>
+                </div>
+              )}
+            </div>
+
             {/* Divider */}
             <div className="border-t border-border my-8"></div>
 
             {/* Price Display */}
-            <div className="mb-8 p-6 bg-background border-2 border-accent">
-              <p className="text-sm text-muted-foreground mb-2 tracking-wide">
-                ESTIMATED PRICE
-              </p>
-              <p className="text-4xl md:text-5xl font-bold text-accent mb-4">
-                ₹{min.toLocaleString('en-IN')} - ₹{max.toLocaleString('en-IN')}
-              </p>
-              <p className="text-xs text-muted-foreground italic">
-                * Final price depends on design complexity and artist selection
-              </p>
+            <div className="mb-8 space-y-4">
+              {appliedCoupon && (
+                <div className="p-4 bg-green-900/20 border border-green-700/50">
+                  <div className="flex justify-between items-center mb-2">
+                    <p className="text-sm font-semibold text-green-400">Discount Applied</p>
+                    <p className="text-lg font-bold text-green-400">-₹{discountAmount.toLocaleString('en-IN')}</p>
+                  </div>
+                  <p className="text-xs text-green-300">You save {Math.round(discountPercent * 100)}% on this service!</p>
+                </div>
+              )}
+              <div className="p-6 bg-background border-2 border-accent">
+                <p className="text-sm text-muted-foreground mb-2 tracking-wide">
+                  {appliedCoupon ? 'FINAL PRICE' : 'ESTIMATED PRICE'}
+                </p>
+                {appliedCoupon ? (
+                  <div>
+                    <p className="text-xs text-muted-foreground line-through mb-2">
+                      ₹{min.toLocaleString('en-IN')}
+                    </p>
+                    <p className="text-4xl md:text-5xl font-bold text-accent mb-4">
+                      ₹{finalPrice.toLocaleString('en-IN')}
+                    </p>
+                  </div>
+                ) : (
+                  <p className="text-4xl md:text-5xl font-bold text-accent mb-4">
+                    ₹{min.toLocaleString('en-IN')} - ₹{max.toLocaleString('en-IN')}
+                  </p>
+                )}
+                <p className="text-xs text-muted-foreground italic">
+                  * Final price depends on design complexity and artist selection
+                </p>
+              </div>
             </div>
 
             {/* CTA Buttons */}

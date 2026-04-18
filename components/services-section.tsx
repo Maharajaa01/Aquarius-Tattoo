@@ -17,31 +17,37 @@ export default function ServicesSection() {
       icon: Paintbrush2,
       name: 'Permanent Tattoos',
       description: 'Professional custom tattoo designs executed by certified artists',
+      link: '/services/tattoos',
     },
     {
       icon: Hand,
       name: 'Temporary Tattoos',
       description: 'Hand poking techniques for experimental or temporary designs',
+      link: '#contact',
     },
     {
       icon: Gem,
       name: 'Body Piercing',
       description: 'Safe and hygienic piercing services with premium jewelry options',
+      link: '/services/piercings',
     },
     {
       icon: BookOpen,
       name: 'Tattoo Training',
       description: 'Learn professional tattoo techniques from certified masters',
+      link: '/services/training',
     },
     {
       icon: Shirt,
       name: 'Clothing Art',
       description: 'Custom designs on t-shirts, shoes, and wearable art',
+      link: '#contact',
     },
     {
       icon: Sparkles,
       name: 'Canvas & Gallery',
       description: 'Original artwork, prints, and exclusive gallery collections',
+      link: '/gallery',
     },
   ]
 
@@ -61,14 +67,15 @@ export default function ServicesSection() {
           {services.map((service, index) => {
             const Icon = service.icon
             return (
-              <div
+              <Link
                 key={index}
-                className="group p-8 border border-border hover:border-accent bg-background transition-all duration-300"
+                href={service.link}
+                className="group p-8 border border-border hover:border-accent bg-background transition-all duration-300 block"
               >
                 <Icon className="w-8 h-8 text-accent mb-4 group-hover:scale-110 transition-transform" />
-                <h3 className="text-xl font-bold mb-2">{service.name}</h3>
+                <h3 className="text-xl font-bold mb-2 group-hover:text-accent transition-colors">{service.name}</h3>
                 <p className="text-sm text-muted-foreground">{service.description}</p>
-              </div>
+              </Link>
             )
           })}
         </div>
