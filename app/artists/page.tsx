@@ -1,10 +1,18 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { ArrowLeft, Star } from 'lucide-react'
 import Navigation from '@/components/navigation'
+import Image from 'next/image'
+import { getRandomTattooImages, TattooImage } from '@/lib/images'
 
 export default function ArtistsPage() {
+  const [bgImages, setBgImages] = useState<TattooImage[]>([])
+
+  useEffect(() => {
+    getRandomTattooImages(4).then(setBgImages).catch(console.error)
+  }, [])
   const artists = [
     {
       name: 'Alex Kumar',
@@ -80,12 +88,25 @@ export default function ArtistsPage() {
           {/* Artists Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {artists.map((artist, idx) => (
-              <div key={idx} className="border border-border hover:border-accent transition-all overflow-hidden group">
+              <div key={idx} className="relative border border-border hover:border-accent transition-all overflow-hidden group bg-[#0f0f0f]">
+                {/* Background Texture Image */}
+                {bgImages[idx] && (
+                  <div className="absolute inset-0 z-0">
+                    <Image
+                      src={bgImages[idx].src}
+                      alt="Texture"
+                      fill
+                      className="object-cover opacity-10 group-hover:opacity-20 transition-all duration-700 grayscale group-hover:grayscale-0"
+                    />
+                  </div>
+                )}
+                <div className="absolute inset-0 bg-gradient-to-b from-[#0f0f0f]/80 to-[#0f0f0f] z-0"></div>
+
                 {/* Artist Header */}
-                <div className="bg-gradient-to-r from-secondary to-black p-8 border-b border-border">
+                <div className="relative z-10 bg-gradient-to-r from-[#0f0f0f]/90 to-black/90 p-8 border-b border-border">
                   <div className="flex items-start justify-between mb-4">
                     <div>
-                      <h3 className="text-2xl font-black mb-2">{artist.name}</h3>
+                      <h3 className="text-2xl font-black mb-2 text-white group-hover:text-accent transition-colors">{artist.name}</h3>
                       <p className="text-accent font-bold tracking-wide">{artist.role}</p>
                     </div>
                     <div className="text-right">
@@ -98,52 +119,52 @@ export default function ArtistsPage() {
                           />
                         ))}
                       </div>
-                      <p className="text-sm text-muted-foreground">{artist.rating}/5.0</p>
+                      <p className="text-sm text-gray-400">{artist.rating}/5.0</p>
                     </div>
                   </div>
                 </div>
 
                 {/* Artist Details */}
-                <div className="p-8">
-                  <p className="text-muted-foreground mb-6">{artist.bio}</p>
+                <div className="relative z-10 p-8">
+                  <p className="text-gray-300 mb-6 leading-relaxed">{artist.bio}</p>
 
                   {/* Stats */}
-                  <div className="grid grid-cols-3 gap-4 mb-6 p-4 bg-secondary border border-border">
+                  <div className="grid grid-cols-3 gap-4 mb-6 p-4 bg-black/60 border border-white/10 backdrop-blur-sm group-hover:border-accent/30 transition-colors">
                     <div className="text-center">
                       <p className="text-2xl font-bold text-accent">{artist.experience}</p>
-                      <p className="text-xs text-muted-foreground tracking-widest">EXPERIENCE</p>
+                      <p className="text-xs text-gray-500 tracking-widest mt-1">EXPERIENCE</p>
                     </div>
-                    <div className="text-center">
+                    <div className="text-center border-x border-white/10">
                       <p className="text-2xl font-bold text-accent">{artist.designs}</p>
-                      <p className="text-xs text-muted-foreground tracking-widest">DESIGNS</p>
+                      <p className="text-xs text-gray-500 tracking-widest mt-1">DESIGNS</p>
                     </div>
                     <div className="text-center">
                       <p className="text-2xl font-bold text-accent">100%</p>
-                      <p className="text-xs text-muted-foreground tracking-widest">SATISFIED</p>
+                      <p className="text-xs text-gray-500 tracking-widest mt-1">SATISFIED</p>
                     </div>
                   </div>
 
                   {/* Certifications */}
                   <div className="mb-6">
-                    <p className="text-sm font-bold text-accent mb-3 tracking-widest">CERTIFICATIONS</p>
-                    <div className="space-y-2">
+                    <p className="text-sm font-bold text-accent mb-3 tracking-widest border-b border-white/10 pb-2 inline-block">CERTIFICATIONS</p>
+                    <div className="space-y-2 mt-2">
                       {artist.certifications.map((cert, cidx) => (
-                        <div key={cidx} className="flex items-center gap-2">
-                          <div className="w-2 h-2 bg-accent rounded-full"></div>
-                          <span className="text-sm text-muted-foreground">{cert}</span>
+                        <div key={cidx} className="flex items-center gap-3">
+                          <div className="w-1.5 h-1.5 bg-accent rotate-45"></div>
+                          <span className="text-sm text-gray-400">{cert}</span>
                         </div>
                       ))}
                     </div>
                   </div>
 
                   {/* Specialties */}
-                  <div className="mb-6">
-                    <p className="text-sm font-bold text-accent mb-3 tracking-widest">SPECIALTIES</p>
-                    <div className="flex flex-wrap gap-2">
+                  <div className="mb-8">
+                    <p className="text-sm font-bold text-accent mb-3 tracking-widest border-b border-white/10 pb-2 inline-block">SPECIALTIES</p>
+                    <div className="flex flex-wrap gap-2 mt-2">
                       {artist.specialties.map((specialty, sidx) => (
                         <span
                           key={sidx}
-                          className="px-3 py-1 bg-secondary border border-border text-xs font-semibold hover:border-accent transition-colors"
+                          className="px-3 py-1 bg-black/50 border border-white/20 text-xs font-semibold hover:border-accent hover:text-white transition-colors text-gray-300 rounded-sm"
                         >
                           {specialty}
                         </span>
@@ -154,9 +175,9 @@ export default function ArtistsPage() {
                   {/* CTA */}
                   <Link
                     href="/#contact"
-                    className="block w-full px-6 py-3 bg-accent text-black font-bold text-center hover:bg-opacity-90 transition-all"
+                    className="block w-full px-6 py-4 bg-accent text-black font-black text-center hover:shadow-[0_0_20px_rgba(var(--accent),0.5)] transition-all uppercase tracking-widest"
                   >
-                    BOOK WITH {artist.name.toUpperCase()}
+                    BOOK WITH {artist.name}
                   </Link>
                 </div>
               </div>

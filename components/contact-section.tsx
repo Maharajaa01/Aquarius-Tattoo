@@ -1,18 +1,44 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { Phone, Mail, MapPin, Clock } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
+import { getRandomTattooImages, TattooImage } from '@/lib/images'
 
 export default function ContactSection() {
+  const [bgImage, setBgImage] = useState<string | null>(null)
+
+  useEffect(() => {
+    getRandomTattooImages(1).then(images => {
+      if (images && images.length > 0) setBgImage(images[0].src)
+    }).catch(console.error)
+  }, [])
+
   return (
-    <section id="contact" className="py-16 md:py-24 bg-background border-b border-border">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="contact" className="relative py-16 md:py-24 border-b border-border overflow-hidden">
+      {/* Blurred Background with Gradient Overlay */}
+      {bgImage && (
+        <div className="absolute inset-0 z-0">
+          <Image
+            src={bgImage}
+            alt="Background"
+            fill
+            className="object-cover blur-[8px] scale-110 opacity-30"
+          />
+        </div>
+      )}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-[#0f0f0f]/95 to-black/95 z-0"></div>
+
+      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* CTA Text inserted correctly */}
+        <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-black tracking-tight mb-4 text-white">BOOK YOUR TATTOO</h2>
+          <p className="text-gray-400 max-w-2xl mx-auto">Get in touch with us today to discuss your ideas, get an estimate, or schedule your next amazing tattoo.</p>
+        </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Contact Info */}
-          <div>
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-8 text-balance">
-              Get In Touch
-            </h2>
+          <div className="bg-black/40 backdrop-blur-sm p-8 border border-white/5 rounded-sm">
 
             <div className="space-y-8">
               {/* Phone */}

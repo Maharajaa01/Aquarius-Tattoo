@@ -1,10 +1,18 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { ArrowLeft, Calendar, User } from 'lucide-react'
 import Navigation from '@/components/navigation'
+import Image from 'next/image'
+import { getRandomTattooImages, TattooImage } from '@/lib/images'
 
 export default function BlogPage() {
+  const [bgImages, setBgImages] = useState<TattooImage[]>([])
+
+  useEffect(() => {
+    getRandomTattooImages(6).then(setBgImages).catch(console.error)
+  }, [])
   const posts = [
     {
       id: 1,
@@ -91,9 +99,16 @@ export default function BlogPage() {
 
           {/* Featured Post */}
           <div className="mb-16 border border-border hover:border-accent transition-all overflow-hidden group">
-            <div className="bg-gradient-to-br from-accent/20 to-transparent aspect-video flex items-center justify-center relative overflow-hidden">
-              <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity"></div>
-              <p className="text-center text-gray-400 z-10">Featured Article</p>
+            <div className="bg-[#0f0f0f] aspect-video flex items-center justify-center relative overflow-hidden">
+              {bgImages[0] && (
+                <Image
+                  src={bgImages[0].src}
+                  alt="Featured blog post"
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-700"
+                />
+              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
             </div>
             <div className="p-8 bg-secondary">
               <div className="mb-3">
@@ -134,9 +149,16 @@ export default function BlogPage() {
                   className="border border-border hover:border-accent transition-all overflow-hidden group flex flex-col"
                 >
                   {/* Post Image */}
-                  <div className="bg-gradient-to-br from-accent/10 to-transparent aspect-video flex items-center justify-center relative overflow-hidden">
-                    <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                    <p className="text-center text-gray-400 z-10">{post.image}</p>
+                  <div className="bg-[#0f0f0f] aspect-video flex items-center justify-center relative overflow-hidden">
+                    {bgImages[post.id] && (
+                      <Image
+                        src={bgImages[post.id].src}
+                        alt="Blog thumbnail"
+                        fill
+                        className="object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0f0f0f] via-transparent to-transparent"></div>
                   </div>
 
                   {/* Post Content */}

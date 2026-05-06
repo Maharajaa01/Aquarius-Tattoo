@@ -1,19 +1,32 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Instagram, Facebook, Twitter } from 'lucide-react'
+import { Instagram, Facebook } from 'lucide-react'
+import Image from 'next/image'
+import { getRandomTattooImages, TattooImage } from '@/lib/images'
 
 export default function Footer() {
+  const [thumbnails, setThumbnails] = useState<TattooImage[]>([])
+
+  useEffect(() => {
+    getRandomTattooImages(6).then(setThumbnails).catch(console.error)
+  }, [])
+
   return (
-    <footer className="bg-secondary border-t border-border">
+    <footer className="bg-black border-t border-white/10 relative overflow-hidden">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           {/* Brand */}
           <div>
             <div className="flex items-center space-x-2 mb-4">
-              <div className="w-8 h-8 bg-accent flex items-center justify-center">
-                <span className="text-primary font-bold text-sm">AQ</span>
-              </div>
+              <Image
+                src="/tattoo_studio_logo.jpeg"
+                alt="Aquarius Tattoo Logo"
+                width={36}
+                height={36}
+                className="w-9 h-9 rounded-md object-cover"
+              />
               <span className="text-lg font-bold tracking-tight">AQUARIUS</span>
             </div>
             <p className="text-sm text-muted-foreground">
@@ -75,30 +88,42 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Social */}
+          {/* Instagram / Thumbnails */}
           <div>
-            <p className="font-semibold text-sm mb-4 tracking-wide">FOLLOW US</p>
+            <p className="font-semibold text-sm mb-4 tracking-wide text-white">OUR WORK</p>
+            <div className="grid grid-cols-3 gap-2">
+              {thumbnails.map((thumb, idx) => (
+                <div key={idx} className="relative aspect-square overflow-hidden bg-gray-900 border border-white/5 hover:border-accent cursor-pointer group">
+                  <Image
+                    src={thumb.src}
+                    alt="Footer design thumbnail"
+                    fill
+                    className="object-cover opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300"
+                  />
+                  <div className="absolute inset-0 bg-black/30 group-hover:bg-black/0 transition-colors"></div>
+                </div>
+              ))}
+            </div>
+
+            <p className="font-semibold text-sm mt-8 mb-4 tracking-wide text-white">FOLLOW US</p>
             <div className="flex gap-4">
               <Link
-                href="#"
-                className="p-2 border border-border hover:border-accent hover:bg-accent hover:text-accent-foreground transition-all"
+                href="https://www.instagram.com/aquarius_tattoos_bangalore/?hl=en"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 border border-white/10 hover:border-accent hover:bg-accent hover:text-black transition-all text-gray-400"
                 aria-label="Instagram"
               >
                 <Instagram size={18} />
               </Link>
               <Link
-                href="#"
-                className="p-2 border border-border hover:border-accent hover:bg-accent hover:text-accent-foreground transition-all"
+                href="https://www.facebook.com/profile.php?id=61550120257740"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 border border-white/10 hover:border-accent hover:bg-accent hover:text-black transition-all text-gray-400"
                 aria-label="Facebook"
               >
                 <Facebook size={18} />
-              </Link>
-              <Link
-                href="#"
-                className="p-2 border border-border hover:border-accent hover:bg-accent hover:text-accent-foreground transition-all"
-                aria-label="Twitter"
-              >
-                <Twitter size={18} />
               </Link>
             </div>
           </div>
@@ -108,7 +133,7 @@ export default function Footer() {
         <div className="border-t border-border pt-8">
           <div className="flex flex-col md:flex-row items-center justify-between text-sm text-muted-foreground">
             <p>
-              &copy; 2024 Aquarius Tattoo Studio. All rights reserved.
+              &copy; 2026 Aquarius Tattoo Studio. All rights reserved.
             </p>
             <div className="flex gap-6 mt-4 md:mt-0">
               <Link href="#" className="hover:text-accent transition-colors">

@@ -4,30 +4,37 @@ import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
+import { getRandomTattooImages, TattooImage } from '@/lib/images'
 
 export default function HeroSection() {
   const [isLoaded, setIsLoaded] = useState(false)
+  const [bgImage, setBgImage] = useState('/hero-tattoo.jpg')
 
   useEffect(() => {
     setIsLoaded(true)
+    getRandomTattooImages(1).then(images => {
+      if (images && images.length > 0) {
+        setBgImage(images[0].src)
+      }
+    }).catch(console.error)
   }, [])
+
 
   return (
     <section
       id="home"
       className="relative min-h-screen bg-black flex items-center justify-center overflow-hidden"
     >
-      {/* Fullscreen tattoo background image with zoom animation */}
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-0 bg-black">
         <Image
-          src="/hero-tattoo.jpg"
+          src={bgImage}
           alt="Premium tattoo artwork"
           fill
-          className={`object-cover transition-transform duration-[3000ms] ${
-            isLoaded ? 'scale-100' : 'scale-110'
+          className={`object-cover transition-transform duration-[4000ms] ease-out ${
+            isLoaded ? 'scale-105' : 'scale-100'
           }`}
           priority
-          quality={85}
+          quality={90}
         />
       </div>
 

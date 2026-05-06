@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Menu, X } from 'lucide-react'
 
 interface NavigationProps {
@@ -30,9 +31,13 @@ export default function Navigation({ isScrolled }: NavigationProps) {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-accent flex items-center justify-center">
-              <span className="text-primary font-bold text-sm">AQ</span>
-            </div>
+            <Image 
+              src="/tattoo_studio_logo.jpeg" 
+              alt="Aquarius Tattoo Logo" 
+              width={36} 
+              height={36} 
+              className="w-9 h-9 rounded-md object-cover" 
+            />
             <span className="text-xl font-bold tracking-tight">AQUARIUS</span>
           </Link>
 

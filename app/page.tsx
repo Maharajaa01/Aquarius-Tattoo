@@ -7,6 +7,7 @@ import OfferPopup from '@/components/offer-popup'
 import TattooShowcase from '@/components/tattoo-showcase'
 import StatsSection from '@/components/stats-section'
 import StylesSection from '@/components/styles-section'
+import StudioSection from '@/components/studio-section'
 import ServicesSection from '@/components/services-section'
 import TestimonialsSection from '@/components/testimonials-section'
 import FAQSection from '@/components/faq-section'
@@ -33,6 +34,7 @@ export default function Home() {
       <TattooShowcase />
       <StatsSection />
       <StylesSection />
+      <StudioSection />
       <ServicesSection />
       <TestimonialsSection />
       <FAQSection />
