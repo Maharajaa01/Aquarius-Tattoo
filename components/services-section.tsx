@@ -23,7 +23,7 @@ export default function ServicesSection() {
       icon: Hand,
       name: 'Temporary Tattoos',
       description: 'Hand poking techniques for experimental or temporary designs',
-      link: '#contact',
+      link: '/services/temporary-tattoos',
     },
     {
       icon: Gem,
@@ -41,7 +41,7 @@ export default function ServicesSection() {
       icon: Shirt,
       name: 'Clothing Art',
       description: 'Custom designs on t-shirts, shoes, and wearable art',
-      link: '#contact',
+      link: '/services/clothing-art',
     },
     {
       icon: Sparkles,
