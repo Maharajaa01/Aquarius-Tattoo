@@ -16,7 +16,7 @@ export default function Footer() {
   return (
     <footer className="bg-black border-t border-white/10 relative overflow-hidden">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-12">
           {/* Brand */}
           <div>
             <div className="flex items-center space-x-2 mb-4">
@@ -66,23 +66,60 @@ export default function Footer() {
             <p className="font-semibold text-sm mb-4 tracking-wide">SERVICES</p>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <Link href="#" className="hover:text-accent transition-colors">
-                  Tattoos
+                <Link href="/services/tattoos" className="hover:text-accent transition-colors">
+                  Permanent Tattoos
                 </Link>
               </li>
               <li>
-                <Link href="#" className="hover:text-accent transition-colors">
-                  Piercings
+                <Link href="/services/temporary-tattoos" className="hover:text-accent transition-colors">
+                  Temporary Tattoos
                 </Link>
               </li>
               <li>
-                <Link href="#" className="hover:text-accent transition-colors">
-                  Training
+                <Link href="/services/piercings" className="hover:text-accent transition-colors">
+                  Body Piercing
                 </Link>
               </li>
               <li>
-                <Link href="#" className="hover:text-accent transition-colors">
-                  Custom Art
+                <Link href="/services/training" className="hover:text-accent transition-colors">
+                  Tattoo Training
+                </Link>
+              </li>
+              <li>
+                <Link href="/services/clothing-art" className="hover:text-accent transition-colors">
+                  Clothing Art
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Explore Styles */}
+          <div>
+            <p className="font-semibold text-sm mb-4 tracking-wide">EXPLORE STYLES</p>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li>
+                <Link href="/gallery" className="hover:text-accent transition-colors">
+                  Realism Tattoos
+                </Link>
+              </li>
+              <li>
+                <Link href="/gallery" className="hover:text-accent transition-colors">
+                  Japanese Tattoos
+                </Link>
+              </li>
+              <li>
+                <Link href="/gallery" className="hover:text-accent transition-colors">
+                  Coverup Tattoos
+                </Link>
+              </li>
+              <li>
+                <Link href="/gallery" className="hover:text-accent transition-colors">
+                  Minimalist Tattoos
+                </Link>
+              </li>
+              <li>
+                <Link href="/artists" className="hover:text-accent transition-colors">
+                  Our Artists
                 </Link>
               </li>
             </ul>

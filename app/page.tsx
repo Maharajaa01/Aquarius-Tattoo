@@ -15,6 +15,11 @@ import ContactSection from '@/components/contact-section'
 import Footer from '@/components/footer'
 import FloatingBookButton from '@/components/floating-book-button'
 
+import BehindTheInk from '@/components/homepage/BehindTheInk'
+import TrustAndHygiene from '@/components/homepage/TrustAndHygiene'
+import CoverupSlider from '@/components/homepage/CoverupSlider'
+import FinancialFlexibility from '@/components/homepage/FinancialFlexibility'
+
 export default function Home() {
   const [isScrolled, setIsScrolled] = useState(false)
 
@@ -34,10 +39,19 @@ export default function Home() {
       <TattooShowcase />
       <StatsSection />
       <StylesSection />
+      
+      <BehindTheInk />
+      
       <StudioSection />
+      <TrustAndHygiene />
+      
       <ServicesSection />
+      <CoverupSlider />
+      
       <TestimonialsSection />
       <FAQSection />
+      <FinancialFlexibility />
+      
       <ContactSection />
       <Footer />
       <FloatingBookButton />
