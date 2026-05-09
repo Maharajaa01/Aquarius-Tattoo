@@ -1,102 +1,166 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
+import { useMagnetic } from '@/hooks/use-magnetic'
 
 interface NavigationProps {
   isScrolled: boolean
 }
 
+const navItems = [
+  { label: 'Gallery', href: '/gallery' },
+  { label: 'Artists', href: '/artists' },
+  { label: 'Services', href: '#services' },
+  { label: 'Blog', href: '/blog' },
+  { label: 'Aftercare', href: '/aftercare' },
+]
+
 export default function Navigation({ isScrolled }: NavigationProps) {
   const [isOpen, setIsOpen] = useState(false)
+  const ctaMag = useMagnetic(0.3)
 
-  const navItems = [
-    { label: 'Home', href: '/' },
-    { label: 'Services', href: '#services' },
-    { label: 'Gallery', href: '/gallery' },
-    { label: 'Artists', href: '/artists' },
-    { label: 'Blog', href: '/blog' },
-    { label: 'Aftercare', href: '/aftercare' },
-  ]
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) setIsOpen(false)
+    }
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   return (
-    <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-background border-b border-border' : 'bg-transparent'
+    <motion.nav
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        isScrolled
+          ? 'bg-black/80 backdrop-blur-xl border-b border-white/[0.07]'
+          : 'bg-black/10 backdrop-blur-md border-b border-white/[0.04]'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2">
-            <Image 
-              src="/tattoo_studio_logo.jpeg" 
-              alt="Aquarius Tattoo Logo" 
-              width={36} 
-              height={36} 
-              className="w-9 h-9 rounded-md object-cover" 
-            />
-            <span className="text-xl font-bold tracking-tight">AQUARIUS</span>
+      <div className="max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="flex items-center justify-between h-20">
+
+          {/* Wordmark */}
+          <Link href="/" className="flex flex-col leading-none group" aria-label="Aquarius Tattoo Studio">
+            <span
+              className="text-[1.3rem] font-light tracking-[0.28em] text-white uppercase transition-opacity duration-300 group-hover:opacity-80"
+              style={{ fontFamily: 'var(--font-display)' }}
+            >
+              AQUARIUS
+            </span>
+            <span className="text-[0.52rem] tracking-[0.44em] text-white/38 uppercase font-light mt-[3px]">
+              TATTOO STUDIO
+            </span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          {/* Desktop links */}
+          <div className="hidden md:flex items-center gap-10">
             {navItems.map((item) => (
               <Link
                 key={item.label}
                 href={item.href}
-                className="text-sm tracking-widest uppercase font-medium hover:text-accent transition-all duration-300 relative group"
+                className="text-[0.62rem] tracking-[0.24em] uppercase text-white/50 hover:text-white/90 transition-colors duration-300"
               >
                 {item.label}
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-300"></span>
               </Link>
             ))}
           </div>
 
-          {/* CTA Button */}
-          <div className="hidden md:block">
-            <Link
-              href="#contact"
-              className="px-6 py-2 bg-accent text-accent-foreground text-sm font-bold tracking-widest uppercase transition-all duration-300 hover:shadow-lg hover:shadow-accent/50"
+          {/* Right side: CTA + mobile toggle */}
+          <div className="flex items-center gap-5">
+            <motion.div
+              ref={ctaMag.ref}
+              animate={{ x: ctaMag.offset.x, y: ctaMag.offset.y }}
+              transition={{ type: 'spring', stiffness: 200, damping: 16, mass: 0.1 }}
+              onMouseMove={ctaMag.onMouseMove}
+              onMouseLeave={ctaMag.onMouseLeave}
+              className="hidden md:block"
             >
-              BOOK NOW
-            </Link>
-          </div>
+              <Link
+                href="#contact"
+                className="inline-flex items-center px-6 py-2.5 text-[0.62rem] tracking-[0.24em] uppercase font-medium nav-cta-glow"
+                style={{ color: 'var(--brand-red)', border: '1px solid var(--brand-red)' }}
+              >
+                Book Now
+              </Link>
+            </motion.div>
 
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 hover:bg-secondary rounded"
-          >
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="md:hidden p-2 text-white/55 hover:text-white transition-colors"
+              aria-label={isOpen ? 'Close menu' : 'Open menu'}
+            >
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.div
+                  key={isOpen ? 'x' : 'menu'}
+                  initial={{ opacity: 0, rotate: -45 }}
+                  animate={{ opacity: 1, rotate: 0 }}
+                  exit={{ opacity: 0, rotate: 45 }}
+                  transition={{ duration: 0.18 }}
+                >
+                  {isOpen ? <X size={20} /> : <Menu size={20} />}
+                </motion.div>
+              </AnimatePresence>
+            </button>
+          </div>
         </div>
-
-        {/* Mobile Navigation */}
-        {isOpen && (
-          <div className="md:hidden pb-4 space-y-2 border-t border-border">
-            {navItems.map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                className="block px-4 py-2 text-sm hover:bg-secondary transition-colors"
-                onClick={() => setIsOpen(false)}
-              >
-                {item.label}
-              </Link>
-            ))}
-            <Link
-              href="#contact"
-              className="block px-4 py-2 bg-accent text-accent-foreground text-sm font-semibold hover:bg-opacity-90"
-              onClick={() => setIsOpen(false)}
-            >
-              BOOK NOW
-            </Link>
-          </div>
-        )}
       </div>
-    </nav>
+
+      {/* Mobile menu */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.38, ease: [0.25, 0.46, 0.45, 0.94] }}
+            className="md:hidden overflow-hidden border-t border-white/[0.06]"
+            style={{ background: 'rgba(0,0,0,0.92)', backdropFilter: 'blur(20px)' }}
+          >
+            <div className="px-6 py-7 flex flex-col gap-1">
+              {navItems.map((item, i) => (
+                <motion.div
+                  key={item.label}
+                  initial={{ opacity: 0, x: -16 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.055, duration: 0.3 }}
+                >
+                  <Link
+                    href={item.href}
+                    className="block py-2.5 text-[0.68rem] tracking-[0.22em] uppercase text-white/50 hover:text-white transition-colors"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                </motion.div>
+              ))}
+
+              <motion.div
+                initial={{ opacity: 0, x: -16 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: navItems.length * 0.055 + 0.05, duration: 0.3 }}
+                className="pt-5 border-t border-white/[0.07]"
+              >
+                <Link
+                  href="#contact"
+                  className="inline-flex items-center px-7 py-3 text-[0.62rem] tracking-[0.24em] uppercase font-medium text-white"
+                  style={{
+                    background: 'var(--brand-red)',
+                    boxShadow: '0 0 22px rgba(196, 30, 58, 0.45)',
+                  }}
+                  onClick={() => setIsOpen(false)}
+                >
+                  Book Now
+                </Link>
+              </motion.div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.nav>
   )
 }

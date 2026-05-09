@@ -9,46 +9,28 @@ export interface Artist {
   styles: string[];
 }
 
+
+
 export const artists: Artist[] = [
   {
-    id: "alex-kumar",
-    name: "Alex Kumar",
-    specialty: "Master of Realism",
-    bio: "With over 10 years of experience, Alex specializes in hyper-realistic portraiture and micro-realism. His attention to detail makes him one of the most sought-after artists for memorial and portrait tattoos.",
+    id: "aravind",
+    name: "Aravind",
+    specialty: "Realism & Black and Grey",
+    bio: "Aravind is a founding artist at Aquarius Tattoo Studio with a sharp eye for detail and a passion for bringing stories to life on skin. His work spans realism, portraiture, and bold blackwork.",
     image: "/placeholder-user.jpg",
-    experience: "10+ Years",
-    awards: ["Best of Day - InkFest 2023", "1st Place Realism - National Tattoo Convention 2022"],
-    styles: ["Realism", "Portrait", "Black & Grey"]
+    experience: "5+ Years",
+    awards: [],
+    styles: ["Realism", "Portrait", "Black & Grey", "Blackwork"]
   },
   {
-    id: "maya-patel",
-    name: "Maya Patel",
-    specialty: "Traditional Japanese & Neo-Traditional",
-    bio: "Maya brings ancient folklore to life with bold lines and vibrant colors. Her deep understanding of Irezumi makes her the go-to artist for large-scale Japanese pieces.",
+    id: "aswin",
+    name: "Aswin",
+    specialty: "Fine Line & Geometric",
+    bio: "Aswin blends precision with artistry, specialising in fine line work, geometric patterns, and custom designs. Every piece he creates is tailored to the individual, turning concepts into lasting art.",
     image: "/placeholder-user.jpg",
-    experience: "8 Years",
-    awards: ["Best Large Color - Asia Ink Expo 2023"],
-    styles: ["Japanese", "Neo-Traditional", "Color"]
-  },
-  {
-    id: "rahul-singh",
-    name: "Rahul Singh",
-    specialty: "Geometric & Mandala",
-    bio: "Rahul's precision is unmatched. He crafts intricate geometric patterns, dotwork, and sacred mandalas that flow perfectly with the body's natural anatomy.",
-    image: "/placeholder-user.jpg",
-    experience: "6 Years",
-    awards: ["Best Dotwork - DotFest 2021"],
-    styles: ["Geometric", "Dotwork", "Mandala", "Blackwork"]
-  },
-  {
-    id: "arjun-desai",
-    name: "Arjun Desai",
-    specialty: "Minimalism & Fine Line",
-    bio: "Arjun is the king of delicate, elegant fine line tattoos. His work is perfect for those seeking subtle, sophisticated, and highly meaningful minimalist art.",
-    image: "/placeholder-user.jpg",
-    experience: "5 Years",
-    awards: ["Rising Star - Fine Line Masters 2022"],
-    styles: ["Fine Line", "Minimalist", "Typography"]
+    experience: "4+ Years",
+    awards: [],
+    styles: ["Fine Line", "Geometric", "Mandala", "Minimalist"]
   }
 ];
 

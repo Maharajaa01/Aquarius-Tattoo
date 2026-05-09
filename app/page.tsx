@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react'
 import Navigation from '@/components/navigation'
 import HeroSection from '@/components/hero-section'
 import OfferPopup from '@/components/offer-popup'
+import AmbientParticles from '@/components/ambient-particles'
+import CustomCursor from '@/components/custom-cursor'
 import TattooShowcase from '@/components/tattoo-showcase'
 import StatsSection from '@/components/stats-section'
 import StylesSection from '@/components/styles-section'
@@ -33,6 +35,8 @@ export default function Home() {
 
   return (
     <div className="bg-background text-foreground">
+      <CustomCursor />
+      <AmbientParticles />
       <Navigation isScrolled={isScrolled} />
       <OfferPopup />
       <HeroSection />
