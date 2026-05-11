@@ -3,55 +3,76 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import Navigation from '@/components/navigation'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, ExternalLink, CheckCircle2 } from 'lucide-react'
+
+const ARTISTS = [
+  {
+    id: 'aravind',
+    name: 'Aravind',
+    specialty: 'Realism & Black and Grey',
+    rate: 299,
+    portfolioHref: '/artists/aravind',
+  },
+  {
+    id: 'aswin',
+    name: 'Aswin',
+    specialty: 'Fine Line & Geometric',
+    rate: 599,
+    portfolioHref: '/artists/aswin',
+  },
+] as const
+
+type ArtistId = (typeof ARTISTS)[number]['id']
 
 export default function CalculatorPage() {
   const [type, setType] = useState<'tattoo' | 'piercing'>('tattoo')
   const [length, setLength] = useState(1)
   const [width, setWidth] = useState(1)
+  const [selectedArtist, setSelectedArtist] = useState<ArtistId | null>(null)
   const [offer, setOffer] = useState('standard')
   const [couponCode, setCouponCode] = useState('')
   const [appliedCoupon, setAppliedCoupon] = useState<string | null>(null)
 
   const validateCoupon = (code: string): number => {
-    const coupons: { [key: string]: number } = {
-      'AQUA20': 0.20,
-      'AQUA25': 0.25,
-      'FIRST15': 0.15,
+    const coupons: Record<string, number> = {
+      AQUA20: 0.20,
+      AQUA25: 0.25,
+      FIRST15: 0.15,
     }
     return coupons[code.toUpperCase()] || 0
   }
 
-  const calculatePrice = () => {
+  const area = length * width
+
+  const calculatePrice = (): { display: string; raw: number } => {
     if (type === 'piercing') {
-      return { min: 1500, max: 2500 }
+      return { display: '₹1,500 – ₹2,500', raw: 1500 }
     }
-
-    const area = length * width
-    if (area < 4) {
-      return { min: 1500, max: 1500 }
+    if (!selectedArtist) {
+      const lo = Math.max(area * 299, 1500)
+      const hi = Math.max(area * 599, 1500)
+      return {
+        display: `₹${lo.toLocaleString('en-IN')} – ₹${hi.toLocaleString('en-IN')}`,
+        raw: lo,
+      }
     }
-
-    const minPrice = area * 399
-    const maxPrice = area * 499
-
-    return { min: minPrice, max: maxPrice }
+    const artist = ARTISTS.find((a) => a.id === selectedArtist)!
+    const price = Math.max(area * artist.rate, 1500)
+    return { display: `₹${price.toLocaleString('en-IN')}`, raw: price }
   }
 
-  const { min, max } = calculatePrice()
-  const area = length * width
-  
+  const { display: priceDisplay, raw: basePrice } = calculatePrice()
   const discountPercent = appliedCoupon ? validateCoupon(appliedCoupon) : 0
-  const discountAmount = Math.round(min * discountPercent)
-  const finalPrice = Math.round(min - discountAmount)
-  
+  const discountAmount = Math.round(basePrice * discountPercent)
+  const finalPrice = Math.round(basePrice - discountAmount)
+
   const handleApplyCoupon = () => {
     if (validateCoupon(couponCode) > 0) {
       setAppliedCoupon(couponCode)
       setCouponCode('')
     }
   }
-  
+
   const handleRemoveCoupon = () => {
     setAppliedCoupon(null)
     setCouponCode('')
@@ -82,6 +103,7 @@ export default function CalculatorPage() {
 
           {/* Card Container */}
           <div className="border border-border p-8 md:p-12 bg-secondary">
+
             {/* Type Toggle */}
             <div className="mb-8">
               <p className="text-sm font-semibold tracking-wide uppercase mb-4">
@@ -111,10 +133,9 @@ export default function CalculatorPage() {
               </div>
             </div>
 
-            {/* Divider */}
-            <div className="border-t border-border my-8"></div>
+            <div className="border-t border-border my-8" />
 
-            {/* Input Section */}
+            {/* Tattoo Inputs */}
             {type === 'tattoo' ? (
               <>
                 {/* Length */}
@@ -125,9 +146,9 @@ export default function CalculatorPage() {
                   <div className="flex items-center gap-4">
                     <input
                       type="range"
-                      min="0.5"
-                      max="12"
-                      step="0.5"
+                      min="1"
+                      max="20"
+                      step="1"
                       value={length}
                       onChange={(e) => setLength(parseFloat(e.target.value))}
                       className="flex-1 h-2 bg-border cursor-pointer accent-accent"
@@ -141,14 +162,14 @@ export default function CalculatorPage() {
                 {/* Width */}
                 <div className="mb-8">
                   <label className="text-sm font-semibold tracking-wide uppercase mb-3 block">
-                    Width (inches)
+                    Breadth (inches)
                   </label>
                   <div className="flex items-center gap-4">
                     <input
                       type="range"
-                      min="0.5"
-                      max="12"
-                      step="0.5"
+                      min="1"
+                      max="20"
+                      step="1"
                       value={width}
                       onChange={(e) => setWidth(parseFloat(e.target.value))}
                       className="flex-1 h-2 bg-border cursor-pointer accent-accent"
@@ -161,16 +182,76 @@ export default function CalculatorPage() {
 
                 {/* Area Display */}
                 <div className="mb-8 p-4 bg-background border border-border">
-                  <p className="text-sm text-muted-foreground mb-2">Total Area</p>
+                  <p className="text-sm text-muted-foreground mb-1">Total Area</p>
                   <p className="text-3xl font-bold">
-                    {area.toFixed(2)} sq in
+                    {area} sq in
                   </p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {length}" × {width}" = {area} sq in
+                  </p>
+                </div>
+
+                {/* Artist Selection */}
+                <div className="mb-8">
+                  <p className="text-sm font-semibold tracking-wide uppercase mb-4">
+                    Choose Your Artist
+                  </p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {ARTISTS.map((artist) => {
+                      const isSelected = selectedArtist === artist.id
+                      return (
+                        <div
+                          key={artist.id}
+                          onClick={() => setSelectedArtist(artist.id)}
+                          className={`relative cursor-pointer p-5 border-2 transition-all duration-200 ${
+                            isSelected
+                              ? 'border-accent bg-accent/10'
+                              : 'border-border bg-background hover:border-accent/50'
+                          }`}
+                        >
+                          {/* Selected checkmark */}
+                          {isSelected && (
+                            <CheckCircle2
+                              size={18}
+                              className="absolute top-3 right-3 text-accent"
+                            />
+                          )}
+
+                          <h3 className={`text-lg font-bold mb-1 transition-colors ${isSelected ? 'text-accent' : 'text-foreground'}`}>
+                            {artist.name}
+                          </h3>
+                          <p className="text-xs text-muted-foreground mb-3">
+                            {artist.specialty}
+                          </p>
+                          <p className="text-2xl font-bold text-accent mb-4">
+                            ₹{artist.rate}
+                            <span className="text-sm font-normal text-muted-foreground ml-1">/ sq in</span>
+                          </p>
+
+                          {/* View Portfolio button */}
+                          <Link
+                            href={artist.portfolioHref}
+                            onClick={(e) => e.stopPropagation()}
+                            className="inline-flex items-center gap-1.5 text-xs font-semibold tracking-wide uppercase border border-border px-3 py-2 hover:border-accent hover:text-accent transition-colors"
+                          >
+                            View Portfolio
+                            <ExternalLink size={11} />
+                          </Link>
+                        </div>
+                      )
+                    })}
+                  </div>
+                  {!selectedArtist && (
+                    <p className="text-xs text-muted-foreground mt-3 italic">
+                      * Select an artist to see their exact price
+                    </p>
+                  )}
                 </div>
               </>
             ) : (
               <div className="mb-8 p-4 bg-background border border-border text-center">
                 <p className="text-muted-foreground mb-2">Standard Piercing Price</p>
-                <p className="text-lg font-semibold">₹{min} - ₹{max}</p>
+                <p className="text-lg font-semibold">₹1,500 – ₹2,500</p>
               </div>
             )}
 
@@ -228,12 +309,11 @@ export default function CalculatorPage() {
               )}
             </div>
 
-            {/* Divider */}
-            <div className="border-t border-border my-8"></div>
+            <div className="border-t border-border my-8" />
 
             {/* Price Display */}
             <div className="mb-8 space-y-4">
-              {appliedCoupon && (
+              {appliedCoupon && selectedArtist && (
                 <div className="p-4 bg-green-900/20 border border-green-700/50">
                   <div className="flex justify-between items-center mb-2">
                     <p className="text-sm font-semibold text-green-400">Discount Applied</p>
@@ -242,14 +322,16 @@ export default function CalculatorPage() {
                   <p className="text-xs text-green-300">You save {Math.round(discountPercent * 100)}% on this service!</p>
                 </div>
               )}
+
               <div className="p-6 bg-background border-2 border-accent">
                 <p className="text-sm text-muted-foreground mb-2 tracking-wide">
-                  {appliedCoupon ? 'FINAL PRICE' : 'ESTIMATED PRICE'}
+                  {appliedCoupon && selectedArtist ? 'FINAL PRICE' : 'ESTIMATED PRICE'}
                 </p>
-                {appliedCoupon ? (
+
+                {appliedCoupon && selectedArtist ? (
                   <div>
                     <p className="text-xs text-muted-foreground line-through mb-2">
-                      ₹{min.toLocaleString('en-IN')}
+                      ₹{basePrice.toLocaleString('en-IN')}
                     </p>
                     <p className="text-4xl md:text-5xl font-bold text-accent mb-4">
                       ₹{finalPrice.toLocaleString('en-IN')}
@@ -257,11 +339,18 @@ export default function CalculatorPage() {
                   </div>
                 ) : (
                   <p className="text-4xl md:text-5xl font-bold text-accent mb-4">
-                    ₹{min.toLocaleString('en-IN')} - ₹{max.toLocaleString('en-IN')}
+                    {priceDisplay}
+                  </p>
+                )}
+
+                {type === 'tattoo' && selectedArtist && (
+                  <p className="text-xs text-muted-foreground mb-2">
+                    {area} sq in × ₹{ARTISTS.find((a) => a.id === selectedArtist)!.rate}/sq in
+                    {area * ARTISTS.find((a) => a.id === selectedArtist)!.rate < 1500 && ' (minimum charge applied)'}
                   </p>
                 )}
                 <p className="text-xs text-muted-foreground italic">
-                  * Final price depends on design complexity and artist selection
+                  * Final price may vary based on design complexity
                 </p>
               </div>
             </div>
@@ -275,10 +364,10 @@ export default function CalculatorPage() {
                 BOOK NOW
               </Link>
               <Link
-                href="/#services"
+                href="/artists"
                 className="px-6 py-4 bg-transparent border-2 border-foreground text-foreground font-semibold tracking-wide hover:bg-foreground hover:text-background transition-all text-center"
               >
-                KNOW MORE
+                MEET ARTISTS
               </Link>
             </div>
           </div>
@@ -288,7 +377,7 @@ export default function CalculatorPage() {
             <div className="border border-border p-6">
               <h3 className="text-lg font-bold mb-3">About Pricing</h3>
               <p className="text-sm text-muted-foreground">
-                Our pricing is based on the size and complexity of your design. Larger pieces and intricate details may require adjustment. We offer competitive rates and flexible payment options.
+                Pricing is based on the total area (length × breadth) and your chosen artist. Minimum charge of ₹1,500 applies. Complex designs may be quoted separately.
               </p>
             </div>
             <div className="border border-border p-6">

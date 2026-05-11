@@ -7,6 +7,7 @@ export interface Artist {
   experience: string;
   awards: string[];
   styles: string[];
+  galleryImages: string[];
 }
 
 
@@ -20,17 +21,19 @@ export const artists: Artist[] = [
     image: "/placeholder-user.jpg",
     experience: "5+ Years",
     awards: [],
-    styles: ["Realism", "Portrait", "Black & Grey", "Blackwork"]
+    styles: ["Realism", "Portrait", "Black & Grey", "Blackwork"],
+    galleryImages: []
   },
   {
     id: "aswin",
     name: "Aswin",
     specialty: "Fine Line & Geometric",
     bio: "Aswin blends precision with artistry, specialising in fine line work, geometric patterns, and custom designs. Every piece he creates is tailored to the individual, turning concepts into lasting art.",
-    image: "/placeholder-user.jpg",
+    image: "/studio/artist/aswin_dp.jpg",
     experience: "4+ Years",
     awards: [],
-    styles: ["Fine Line", "Geometric", "Mandala", "Minimalist"]
+    styles: ["Fine Line", "Geometric", "Mandala", "Minimalist"],
+    galleryImages: ["/studio/artist/aswin.jpg"]
   }
 ];
 

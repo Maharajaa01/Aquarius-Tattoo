@@ -17,14 +17,14 @@ const stagger = {
 
 const revealUp = {
   hidden:  { opacity: 0, y: 72 },
-  visible: { opacity: 1, y: 0, transition: { duration: 1.05, ease: [0.16, 1, 0.3, 1] } },
+  visible: { opacity: 1, y: 0, transition: { duration: 1.05, ease: [0.16, 1, 0.3, 1] as const } },
 }
 
 function fadeUp(delay: number) {
   return {
     initial:    { opacity: 0, y: 28 },
     animate:    { opacity: 1, y: 0 },
-    transition: { duration: 0.85, delay, ease: [0.25, 0.46, 0.45, 0.94] },
+    transition: { duration: 0.85, delay, ease: [0.25, 0.46, 0.45, 0.94] as const },
   }
 }
 
@@ -297,7 +297,7 @@ export default function HeroSection() {
           <motion.div
             initial={{ opacity: 0, scale: 0.92 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.5, delay: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+            transition={{ duration: 1.5, delay: 0.5, ease: [0.25, 0.46, 0.45, 0.94] as const }}
             className="hidden lg:flex flex-shrink-0 items-center justify-center"
           >
             <div className="relative">

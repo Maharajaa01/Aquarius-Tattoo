@@ -17,13 +17,13 @@ export default function ArtistProfilePage({ params }: { params: Promise<{ id: st
 
   useEffect(() => {
     getArtistById(id).then(a => {
-      if (a) setArtist(a)
-    })
-    
-    // Simulate fetching artist specific images
-    getTattooImages().then(({ allImages }) => {
-      // Just taking a random slice for demo purposes
-      setGallery(allImages.slice(0, 12))
+      if (!a) return
+      setArtist(a)
+      getTattooImages().then(({ allImages }) => {
+        const artistImgs: TattooImage[] = (a.galleryImages ?? []).map((src) => ({ src, category: 'artist' }))
+        const filler = allImages.slice(0, Math.max(0, 12 - artistImgs.length))
+        setGallery([...artistImgs, ...filler])
+      })
     })
   }, [id])
 

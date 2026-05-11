@@ -44,7 +44,7 @@ export default function ArtistsPage() {
                       src={artist.image}
                       alt={artist.name}
                       fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-700 grayscale group-hover:grayscale-0"
+                      className="object-cover group-hover:scale-105 transition-transform duration-700"
                     />
                   </div>
                   <div className="p-8 sm:w-3/5 flex flex-col justify-between">
